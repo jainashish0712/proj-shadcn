@@ -76,7 +76,7 @@ export default function Home() {
           </div>
 
           {/* Right Column - Score & Penalty Details */}
-          <div className="lg:col-span-5 flex flex-col h-[95%]">
+          <div className={`lg:col-span-5 flex flex-col ${totalScore <= 50 ? "h-full" : "h-[95%]"}`}>
             <ScoreCard
               totalScore={totalScore}
               daysP={daysP}
