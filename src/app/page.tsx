@@ -60,7 +60,7 @@ export default function Home() {
     let daysPenalty = 0;
     const weekdayCount = ["Mon", "Tue", "Wed", "Thu", "Fri"].filter(d => callingDays.includes(d as Day)).length;
     const weekendCount = ["Sat", "Sun"].filter(d => callingDays.includes(d as Day)).length;
-    
+
     if (weekdayCount === 5) daysPenalty = 0;
     else if (weekdayCount === 4) daysPenalty = 10;
     else if (weekdayCount === 3) daysPenalty = 10;
@@ -107,15 +107,15 @@ export default function Home() {
   const totalScore = Math.max(0, 100 - (daysP + windowP + countP + intervalP));
 
   // Determine which background asset to use
-  let activeAsset = "Level1_cropped.png"; // Level 1 default
+  let activeAsset = "Level1_cropped_v2.png"; // Level 1 default
   if (totalScore >= 80) {
-    activeAsset = "Level1_cropped.png"; // Level 1
+    activeAsset = "Level1_cropped_v2.png"; // Level 1
   } else if (totalScore >= 60) {
-    activeAsset = "Level2_cropped.png"; // Level 2
+    activeAsset = "Level2_cropped_v2.png"; // Level 2
   } else if (totalScore >= 40) {
-    activeAsset = "Level3_cropped.png"; // Level 3
+    activeAsset = "Level3_cropped_v2.png"; // Level 3
   } else {
-    activeAsset = "Level4_cropped.png"; // Level 4
+    activeAsset = "Level4_cropped_v2.png"; // Level 4
   }
 
   // Toggle Calling Days
@@ -188,42 +188,42 @@ export default function Home() {
   return (
     <div className="flex-1 bg-[#F9FAFB] flex flex-col font-sans">
       {/* Main Content Area */}
-      <div className="max-w-7xl mx-auto w-full px-6 pt-12 pb-24 flex-1 flex flex-col">
+      <div className="max-w-7xl mx-auto w-full px-12 pt-12 pb-24 flex-1 flex flex-col">
         {/* Title */}
-        <h1 className="text-3xl font-bold text-[#1E293B] tracking-tight">
+        <h1 className="text-3xl font-bold text-slate-800 tracking-tight mb-8">
           Redial & Guardrails
         </h1>
 
         {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-8 flex-1 items-start">
-          
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
+
           {/* Left Column - Controls */}
-          <div className="lg:col-span-7 space-y-6">
-            
+          <div className="lg:col-span-6 space-y-12 flex flex-col">
+
             {/* Guardrails Card */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-              <div className="bg-[#F8FAFC] border-b border-slate-100 px-6 py-4">
-                <h2 className="font-semibold text-slate-800 text-base">
+            <div className="bg-white rounded-2xl border border-slate-200/80  overflow-hidden flex-1 flex flex-col">
+              <div className="bg-[#F8FAFC] border-b border-slate-100 px-6 py-2">
+                <h2 className="font-bold text-slate-800 text-base">
                   Guardrails
                 </h2>
               </div>
-              <div className="p-6 sm:p-8 space-y-10">
+              <div className="p-6 space-y-10 flex-1 flex flex-col justify-center">
                 {/* Calling Days */}
                 <div>
-                  <h3 className="font-medium text-slate-950 text-sm mb-4">
+                  <h3 className="font-bold text-slate-900 text-sm mb-4">
                     Calling days
                   </h3>
-                  <div className="flex flex-wrap gap-2.5">
+                  <div className="flex flex-wrap gap-2">
                     {(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as Day[]).map((day) => {
                       const isSelected = callingDays.includes(day);
                       return (
                         <button
                           key={day}
                           onClick={() => toggleDay(day)}
-                          className={`w-12 h-10 rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer ${
+                          className={`w-[64px] h-[40px] rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer ${
                             isSelected
-                              ? "bg-slate-800 text-white shadow-sm hover:bg-slate-705"
-                              : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50"
+                              ? "bg-slate-800 text-white  hover:bg-slate-700"
+                              : "bg-white text-slate-750 border border-slate-200 hover:bg-slate-50"
                           }`}
                         >
                           {day}
@@ -235,19 +235,19 @@ export default function Home() {
 
                 {/* Calling Window */}
                 <div>
-                  <h3 className="font-medium text-slate-950 text-sm mb-6">
+                  <h3 className="font-bold text-slate-900 text-sm mb-3">
                     Calling window
                   </h3>
                   <div className="px-1 pt-2 pb-6">
                     {/* Slider Container */}
-                    <div 
+                    <div
                       ref={windowTrackRef}
                       onPointerDown={handleWindowPointerDown}
-                      className="h-[3px] bg-slate-200 rounded-full relative cursor-pointer"
+                      className="h-[6px] bg-slate-200 rounded-full relative cursor-pointer"
                     >
                       {/* Active Fill */}
                       <div
-                        className="absolute h-full bg-slate-900 rounded-full"
+                        className="absolute h-full bg-slate-900"
                         style={{
                           left: "0%",
                           right: `${100 - (windowEnd / 4) * 100}%`,
@@ -256,14 +256,15 @@ export default function Home() {
                     </div>
 
                     {/* Timeline Labels */}
-                    <div className="flex justify-between mt-4 text-xs font-semibold text-slate-400">
+                    <div className="relative mx-2 mt-4  h-6 text-xs font-semibold text-slate-400">
                       {HOURS.map((hour, idx) => (
                         <span
                           key={hour}
                           onClick={() => setWindowEnd(idx)}
-                          className={`cursor-pointer hover:text-slate-800 transition-colors ${
-                            idx <= windowEnd ? "text-slate-700 font-bold" : "text-slate-400"
+                          className={`absolute transform -translate-x-1/2 whitespace-nowrap cursor-pointer hover:text-slate-800 transition-colors ${
+                            idx <= windowEnd ? "text-slate-700" : "text-slate-400"
                           }`}
+                          style={{ left: `${(idx / 4) * 100}%` }}
                         >
                           {hour}
                         </span>
@@ -275,24 +276,26 @@ export default function Home() {
             </div>
 
             {/* Redial Card */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-              <div className="bg-[#F8FAFC] border-b border-slate-100 px-6 py-4">
-                <h2 className="font-semibold text-slate-800 text-base">
+            <div className="bg-white rounded-2xl border border-slate-200/80  overflow-hidden flex-1 flex flex-col">
+              <div className="bg-[#F8FAFC] border-b border-slate-100 px-6 py-2">
+                <h2 className="font-bold text-slate-800 text-base">
                   Redial
                 </h2>
               </div>
-              <div className="p-6 sm:p-8 space-y-10">
+              <div
+              className="p-4 flex-1 flex flex-col justify-center"
+              >
                 {/* Redial Count */}
                 <div>
-                  <h3 className="font-medium text-slate-950 text-sm mb-6">
+                  <h3 className="font-bold text-slate-900 text-sm mb-3">
                     Redial count
                   </h3>
                   <div className="px-1 pt-2 pb-6">
                     {/* Slider Container */}
-                    <div 
+                    <div
                       ref={redialTrackRef}
                       onPointerDown={handleRedialPointerDown}
-                      className="h-[3px] bg-slate-200 rounded-full relative cursor-pointer"
+                      className="h-[6px] bg-slate-200 relative cursor-pointer"
                     >
                       {/* Active Fill */}
                       <div
@@ -307,7 +310,7 @@ export default function Home() {
                       {[0, 2, 4, 6, 8, 10].map((val) => (
                         <div
                           key={val}
-                          className={`absolute w-1 h-1 rounded-full -top-[0.5px] transform -translate-x-1/2 ${
+                          className={`absolute w-[1px] h-[6px] -top-[1.5px] transform -translate-x-1/2 ${
                             val <= redialCount ? "bg-slate-900" : "bg-slate-300"
                           }`}
                           style={{ left: `${(val / 10) * 100}%` }}
@@ -316,15 +319,15 @@ export default function Home() {
                     </div>
 
                     {/* Timeline Labels */}
-                    <div className="flex justify-between mt-4 text-xs font-semibold text-slate-400">
+                    <div className="relative mt-4 h-6 text-xs font-semibold text-slate-450">
                       {[0, 2, 4, 6, 8, 10].map((val) => (
                         <span
                           key={val}
                           onClick={() => setRedialCount(val)}
-                          className={`cursor-pointer hover:text-slate-800 transition-colors ${
-                            val === redialCount ? "text-slate-700 font-bold" : ""
+                          className={`absolute transform -translate-x-1/2 cursor-pointer hover:text-slate-800 transition-colors ${
+                            val === redialCount ? "text-slate-700 font-bold" : "text-slate-400"
                           }`}
-                          style={{ width: "20px", textAlign: "center" }}
+                          style={{ left: `${(val / 10) * 100}%` }}
                         >
                           {val}
                         </span>
@@ -335,7 +338,7 @@ export default function Home() {
 
                 {/* Redial Interval */}
                 <div>
-                  <h3 className="font-medium text-slate-950 text-sm mb-4">
+                  <h3 className="font-bold text-slate-900 text-sm mb-4">
                     Redial interval
                   </h3>
                   <div className="bg-slate-100/80 p-1 rounded-xl flex">
@@ -345,9 +348,9 @@ export default function Home() {
                         <button
                           key={interval}
                           onClick={() => setRedialInterval(interval)}
-                          className={`flex-1 py-2.5 rounded-lg text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                          className={`flex-1 py-2.5 rounded-lg text-s font-semibold transition-all duration-200 cursor-pointer ${
                             isSelected
-                              ? "bg-white text-slate-900 shadow-sm border-slate-100"
+                              ? "bg-white text-slate-900  border-slate-100"
                               : "text-slate-500 hover:text-slate-800"
                           }`}
                         >
@@ -362,14 +365,16 @@ export default function Home() {
           </div>
 
           {/* Right Column - Score & Penalty Details */}
-          <div className="lg:col-span-5 space-y-6">
-            
+          <div className="lg:col-span-5 flex flex-col">
+
             {/* Campaign Score Card */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col">
-              
+            <div className="bg-white rounded-2xl border border-slate-200/80  overflow-hidden flex-1 flex flex-col">
+
               {/* Blue Score Container with Cropped Background */}
-              <div className="relative w-full h-[260px] overflow-hidden rounded-t-2xl">
-                
+              <div
+               className="relative w-full aspect-[512/403] overflow-hidden rounded-t-2xl flex-shrink-0"
+               >
+
                 {/* Background Landscape / Skyline Illustration */}
                 <Image
                   src={`/${activeAsset}`}
@@ -377,12 +382,12 @@ export default function Home() {
                   fill
                   sizes="(max-width: 768px) 100vw, 400px"
                   priority
-                  className="object-cover object-top"
+                  className="object-cover"
                 />
 
                 {/* Score overlay */}
-                <div className="absolute inset-0 flex flex-col items-center justify-start pt-12 z-10">
-                  <span className="text-[90px] font-bold text-white leading-none tracking-tight">
+                <div className="absolute inset-0 flex flex-col items-center justify-start pt-[72px] z-10">
+                  <span className="text-[96px] font-bold text-white leading-none tracking-tighter">
                     {totalScore}
                   </span>
                   <p className="text-[13px] font-semibold text-blue-100/90 tracking-wide mt-2">
@@ -393,7 +398,7 @@ export default function Home() {
 
               {/* Alert container if settings are not optimized (score <= 50) */}
               {totalScore <= 50 && (
-                <div className="bg-[#F0F7FF] px-6 py-4 flex gap-3 border-b border-slate-100">
+                <div className="bg-[#F0F7FF] px-6 py-4 flex gap-3 border-b border-slate-100 flex-shrink-0">
                   <span className="text-blue-600 font-bold text-lg leading-none mt-0.5">✦</span>
                   <div className="space-y-1">
                     <h4 className="text-xs font-bold text-blue-900">
@@ -407,40 +412,40 @@ export default function Home() {
               )}
 
               {/* Penalty Rows List */}
-              <div className="divide-y divide-slate-100 px-6 font-sans">
+              <div className="divide-y divide-slate-100 font-sans flex-1 flex flex-col justify-center">
                 {/* Penalty Row Component */}
-                <div className="flex justify-between items-center py-4">
-                  <span className="text-sm font-medium text-slate-600">
+                <div className="flex justify-between items-center py-[16px]">
+                  <span className="text-sm font-bold text-slate-600 px-6 px-6">
                     Calling days penalty
                   </span>
-                  <span className={`text-sm font-bold ${daysP > 0 ? "text-red-500" : "text-emerald-500"}`}>
+                  <span className={`text-sm font-bold px-6 ${daysP > 0 ? "text-red-500" : "text-emerald-500"}`}>
                     {daysP > 0 ? `-${daysP}` : "0"}
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center py-4">
-                  <span className="text-sm font-medium text-slate-600">
+                <div className="flex justify-between items-center py-[16px]">
+                  <span className="text-sm font-bold text-slate-600 px-6">
                     Calling window penalty
                   </span>
-                  <span className={`text-sm font-bold ${windowP > 0 ? "text-red-500" : "text-emerald-500"}`}>
+                  <span className={`text-sm font-bold px-6 ${windowP > 0 ? "text-red-500" : "text-emerald-500"}`}>
                     {windowP > 0 ? `-${windowP}` : "0"}
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center py-4">
-                  <span className="text-sm font-medium text-slate-600">
+                <div className="flex justify-between items-center py-[16px]">
+                  <span className="text-sm font-bold text-slate-600 px-6">
                     Redial count penalty
                   </span>
-                  <span className={`text-sm font-bold ${countP > 0 ? "text-red-500" : "text-emerald-500"}`}>
+                  <span className={`text-sm font-bold px-6 ${countP > 0 ? "text-red-500" : "text-emerald-500"}`}>
                     {countP > 0 ? `-${countP}` : "0"}
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center py-4">
-                  <span className="text-sm font-medium text-slate-600">
+                <div className="flex justify-between items-center py-[16px]">
+                  <span className="text-sm font-bold text-slate-600 px-6">
                     Redial interval penalty
                   </span>
-                  <span className={`text-sm font-bold ${intervalP > 0 ? "text-red-500" : "text-emerald-500"}`}>
+                  <span className={`text-sm font-bold px-6 ${intervalP > 0 ? "text-red-500" : "text-emerald-500"}`}>
                     {intervalP > 0 ? `-${intervalP}` : "0"}
                   </span>
                 </div>
@@ -454,7 +459,7 @@ export default function Home() {
       {/* Sticky Bottom Footer */}
       <footer className="border-t border-slate-200 bg-white py-4 px-6 mt-auto">
         <div className="max-w-7xl mx-auto w-full flex justify-end">
-          <button className="bg-[#5E626B] hover:bg-[#4E5158] text-white font-semibold text-sm px-6 py-2.5 rounded-lg transition-colors cursor-pointer shadow-sm">
+          <button className="bg-[#5E626B] hover:bg-[#4E5158] text-white font-semibold text-sm px-6 py-2.5 rounded-lg transition-colors cursor-pointer ">
             Submit
           </button>
         </div>
