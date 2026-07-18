@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Redial & Guardrails Campaign Score Dashboard
+
+An interactive Next.js dashboard built to configure and evaluate outbound calling settings. The app calculates a real-time campaign efficiency score based on the organization's rules and visualizes campaign health using dynamic weather-themed backdrops.
+
+## What it does
+
+Outbound calling campaigns require fine-tuning to run efficiently. This app provides a simple UI to test calling configurations and see their impact immediately:
+
+* **Guardrails Management**: Toggle calling days of the week (Monday through Sunday) and slide the calling window end-time (from 8 AM up to 9 PM).
+* **Redial Tuning**: Adjust the redial count (0–10 attempts) and select the cooling-off interval between retries (3 to 24 hours).
+* **Real-time Penalty Scoring**: Computes a score out of 100 using a formula based on org-level optimal targets. Any non-optimal configurations deduct penalty points from the score.
+* **Visual Weather Levels**: The campaign score determines the weather rating, swapping the card illustration to reflect the health of your setup:
+  * **Level 1 (Score 82-100)**: Clear Skyline (Optimal settings)
+  * **Level 2 (Score 62-81)**: Cloudy
+  * **Level 3 (Score 42-61)**: Overcast (Triggers an "optimization needed" alert)
+  * **Level 4 (Score 0-41)**: Rainy / Stormy
+
+## Technology Stack
+
+* **Framework**: Next.js (App Router)
+* **Language**: TypeScript
+* **Styling**: Tailwind CSS
+* **Scoring Logic**: Separated logic layer under `src/utils/scoring.ts`
 
 ## Getting Started
 
-First, run the development server:
+First, install dependencies:
+
+```bash
+npm install
+```
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the dashboard.
