@@ -17,15 +17,15 @@ export const ScoreCard: React.FC<ScoreCardProps> = ({
   intervalP,
 }) => {
   // Determine which background asset to use
-  let activeAsset = "Level1_cropped_v2.png"; // Level 1 default
+  let activeAsset = "Level1.png"; // Level 1 default
   if (totalScore >= 82) {
-    activeAsset = "Level1_cropped_v2.png"; // Level 1
+    activeAsset = "Level1.png"; // Level 1
   } else if (totalScore >= 62) {
-    activeAsset = "Level2_cropped_v2.png"; // Level 2
+    activeAsset = "Level2.png"; // Level 2
   } else if (totalScore >= 42) {
-    activeAsset = "Level3_cropped_v2.png"; // Level 3
+    activeAsset = "Level3.png"; // Level 3
   } else {
-    activeAsset = "Level4_cropped_v2.png"; // Level 4
+    activeAsset = "Level4.png"; // Level 4
   }
 
   return (
