@@ -107,15 +107,15 @@ export default function Home() {
   const totalScore = Math.max(0, 100 - (daysP + windowP + countP + intervalP));
 
   // Determine which background asset to use
-  let activeAsset = "Level1_cropped_v2.png"; // Level 1 default
+  let activeAsset = "Level1.png"; // Level 1 default
   if (totalScore >= 80) {
-    activeAsset = "Level1_cropped_v2.png"; // Level 1
+    activeAsset = "Level1.png"; // Level 1
   } else if (totalScore >= 60) {
-    activeAsset = "Level2_cropped_v2.png"; // Level 2
+    activeAsset = "Level2.png"; // Level 2
   } else if (totalScore >= 40) {
-    activeAsset = "Level3_cropped_v2.png"; // Level 3
+    activeAsset = "Level3.png"; // Level 3
   } else {
-    activeAsset = "Level4_cropped_v2.png"; // Level 4
+    activeAsset = "Level4.png"; // Level 4
   }
 
   // Toggle Calling Days
@@ -220,10 +220,10 @@ export default function Home() {
                         <button
                           key={day}
                           onClick={() => toggleDay(day)}
-                          className={`w-[64px] h-[40px] rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer ${
+                          className={`w-[64px] h-[40px] rounded-lg text-sm  transition-all duration-200 cursor-pointer ${
                             isSelected
                               ? "bg-slate-800 text-white  hover:bg-slate-700"
-                              : "bg-white text-slate-750 border border-slate-200 hover:bg-slate-50"
+                              : "font-semibold bg-white text-slate-950 border border-slate-200 hover:bg-slate-50"
                           }`}
                         >
                           {day}
@@ -365,7 +365,7 @@ export default function Home() {
           </div>
 
           {/* Right Column - Score & Penalty Details */}
-          <div className="lg:col-span-5 flex flex-col">
+          <div className="lg:col-span-5 flex flex-col h-[95%]">
 
             {/* Campaign Score Card */}
             <div className="bg-white rounded-2xl border border-slate-200/80  overflow-hidden flex-1 flex flex-col">
@@ -386,8 +386,8 @@ export default function Home() {
                 />
 
                 {/* Score overlay */}
-                <div className="absolute inset-0 flex flex-col items-center justify-start pt-[72px] z-10">
-                  <span className="text-[96px] font-bold text-white leading-none tracking-tighter">
+                <div className="absolute inset-0 flex flex-col items-center justify-start pt-[52px] z-10">
+                  <span className="text-[76px] font-bold text-white leading-none tracking-tighter">
                     {totalScore}
                   </span>
                   <p className="text-[13px] font-semibold text-blue-100/90 tracking-wide mt-2">
@@ -399,12 +399,12 @@ export default function Home() {
               {/* Alert container if settings are not optimized (score <= 50) */}
               {totalScore <= 50 && (
                 <div className="bg-[#F0F7FF] px-6 py-4 flex gap-3 border-b border-slate-100 flex-shrink-0">
-                  <span className="text-blue-600 font-bold text-lg leading-none mt-0.5">✦</span>
+                  <span className="text-blue-600 font-bold text-lg leading-none mt-[-2px]">✦</span>
                   <div className="space-y-1">
-                    <h4 className="text-xs font-bold text-blue-900">
+                    <h4 className="mx-[-4px] text-xs font-bold text-blue-900">
                       Your settings are not optimized!
                     </h4>
-                    <p className="text-xs text-slate-500 leading-normal">
+                    <p className="text-xs text-slate-500 leading-normal font-bold mx-[-24px]">
                       Your settings may slow down your calling operations and campaign completion. We recommend fixing your settings.
                     </p>
                   </div>
@@ -412,40 +412,42 @@ export default function Home() {
               )}
 
               {/* Penalty Rows List */}
-              <div className="divide-y divide-slate-100 font-sans flex-1 flex flex-col justify-center">
+              <div
+              className="divide-y divide-slate-100 font-sans flex flex-col justify-center"
+              >
                 {/* Penalty Row Component */}
                 <div className="flex justify-between items-center py-[16px]">
-                  <span className="text-sm font-bold text-slate-600 px-6 px-6">
+                  <span className="text-sm font-semibold text-slate-600 px-8">
                     Calling days penalty
                   </span>
-                  <span className={`text-sm font-bold px-6 ${daysP > 0 ? "text-red-500" : "text-emerald-500"}`}>
+                  <span className={`text-sm font-bold px-8 ${daysP > 0 ? "text-red-500" : "text-emerald-500"}`}>
                     {daysP > 0 ? `-${daysP}` : "0"}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center py-[16px]">
-                  <span className="text-sm font-bold text-slate-600 px-6">
+                  <span className="text-sm font-semibold text-slate-600 px-8">
                     Calling window penalty
                   </span>
-                  <span className={`text-sm font-bold px-6 ${windowP > 0 ? "text-red-500" : "text-emerald-500"}`}>
+                  <span className={`text-sm font-bold px-8 ${windowP > 0 ? "text-red-500" : "text-emerald-500"}`}>
                     {windowP > 0 ? `-${windowP}` : "0"}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center py-[16px]">
-                  <span className="text-sm font-bold text-slate-600 px-6">
+                  <span className="text-sm font-semibold text-slate-600 px-8">
                     Redial count penalty
                   </span>
-                  <span className={`text-sm font-bold px-6 ${countP > 0 ? "text-red-500" : "text-emerald-500"}`}>
+                  <span className={`text-sm font-bold px-8 ${countP > 0 ? "text-red-500" : "text-emerald-500"}`}>
                     {countP > 0 ? `-${countP}` : "0"}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center py-[16px]">
-                  <span className="text-sm font-bold text-slate-600 px-6">
+                  <span className="text-sm font-semibold text-slate-600 px-8">
                     Redial interval penalty
                   </span>
-                  <span className={`text-sm font-bold px-6 ${intervalP > 0 ? "text-red-500" : "text-emerald-500"}`}>
+                  <span className={`text-sm font-bold px-8 ${intervalP > 0 ? "text-red-500" : "text-emerald-500"}`}>
                     {intervalP > 0 ? `-${intervalP}` : "0"}
                   </span>
                 </div>
@@ -459,7 +461,7 @@ export default function Home() {
       {/* Sticky Bottom Footer */}
       <footer className="border-t border-slate-200 bg-white py-4 px-6 mt-auto">
         <div className="max-w-7xl mx-auto w-full flex justify-end">
-          <button className="bg-[#5E626B] hover:bg-[#4E5158] text-white font-semibold text-sm px-6 py-2.5 rounded-lg transition-colors cursor-pointer ">
+          <button className="bg-[#000] hover:bg-[#000] text-white font-semibold text-sm px-6 py-2.5 rounded-lg transition-colors cursor-pointer ">
             Submit
           </button>
         </div>
