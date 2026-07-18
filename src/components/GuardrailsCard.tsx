@@ -1,4 +1,5 @@
-import React, { useRef } from "react";
+import React from "react";
+import * as SliderPrimitive from "@radix-ui/react-slider";
 import { Day } from "@/utils/scoring";
 
 const HOURS = ["8 AM", "11 AM", "2 PM", "5 PM", "9 PM"];
@@ -16,39 +17,9 @@ export const GuardrailsCard: React.FC<GuardrailsCardProps> = ({
   windowEnd,
   setWindowEnd,
 }) => {
-  const windowTrackRef = useRef<HTMLDivElement>(null);
-
-  const handleWindowPointerDown = (e: React.PointerEvent) => {
-    if (!windowTrackRef.current) return;
-    const track = windowTrackRef.current;
-    const rect = track.getBoundingClientRect();
-    const width = rect.width;
-
-    const updateValue = (clientX: number) => {
-      const offsetX = Math.max(0, Math.min(clientX - rect.left, width));
-      const percentage = offsetX / width;
-      const index = Math.round(percentage * 4);
-      setWindowEnd(index);
-    };
-
-    updateValue(e.clientX);
-
-    const handlePointerMove = (moveEvent: PointerEvent) => {
-      updateValue(moveEvent.clientX);
-    };
-
-    const handlePointerUp = () => {
-      document.removeEventListener("pointermove", handlePointerMove);
-      document.removeEventListener("pointerup", handlePointerUp);
-    };
-
-    document.addEventListener("pointermove", handlePointerMove);
-    document.addEventListener("pointerup", handlePointerUp);
-  };
-
   return (
     <div className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden flex-1 flex flex-col">
-      <div className="bg-[#f4f4f5] border-b border-slate-100 px-6 py-2">
+      <div className="bg-[#F8FAFC] border-b border-slate-100 px-6 py-2">
         <h2 className="font-bold text-slate-800 text-base">Guardrails</h2>
       </div>
       <div className="p-6 space-y-10 flex-1 flex flex-col justify-center">
@@ -62,10 +33,10 @@ export const GuardrailsCard: React.FC<GuardrailsCardProps> = ({
                 <button
                   key={day}
                   onClick={() => toggleDay(day)}
-                  className={`w-[64px] h-[40px] rounded-lg text-sm  transition-all duration-200 cursor-pointer ${
+                  className={`w-[64px] h-[40px] rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer ${
                     isSelected
                       ? "bg-slate-800 text-white hover:bg-slate-700"
-                      : "bg-white font-semibold text-black text-slate-750 border border-slate-200 hover:bg-slate-50"
+                      : "bg-white text-slate-750 border border-slate-200 hover:bg-slate-50"
                   }`}
                 >
                   {day}
@@ -79,21 +50,22 @@ export const GuardrailsCard: React.FC<GuardrailsCardProps> = ({
         <div>
           <h3 className="font-bold text-slate-900 text-sm mb-3">Calling window</h3>
           <div className="px-1 pt-2 pb-6">
-            {/* Slider Container */}
-            <div
-              ref={windowTrackRef}
-              onPointerDown={handleWindowPointerDown}
-              className="h-[6px] bg-slate-200 rounded-full relative cursor-pointer"
+            {/* Radix UI Standard Slider matching original styling */}
+            <SliderPrimitive.Root
+              value={[windowEnd]}
+              onValueChange={(val) => setWindowEnd(val[0])}
+              max={4}
+              step={1}
+              className="relative flex items-center select-none touch-none w-full h-[6px] bg-slate-200 rounded-full cursor-pointer"
             >
-              {/* Active Fill */}
-              <div
-                className="absolute h-full bg-slate-900"
-                style={{
-                  left: "0%",
-                  right: `${100 - (windowEnd / 4) * 100}%`,
-                }}
+              <SliderPrimitive.Track className="relative grow h-full rounded-full">
+                <SliderPrimitive.Range className="absolute h-full bg-slate-900 rounded-full" />
+              </SliderPrimitive.Track>
+              <SliderPrimitive.Thumb 
+                className="block w-4 h-4 bg-transparent outline-none cursor-pointer focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 rounded-full" 
+                aria-label="Calling window end time" 
               />
-            </div>
+            </SliderPrimitive.Root>
 
             {/* Timeline Labels */}
             <div className="relative mx-2 mt-4 h-6 text-xs font-semibold text-slate-400">
