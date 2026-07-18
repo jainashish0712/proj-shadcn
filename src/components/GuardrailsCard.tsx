@@ -1,7 +1,16 @@
 import React, { useRef } from "react";
 import { Day } from "../utils/scoring";
+import { useSlider } from "../hooks/useSlider";
+import { SegmentedControl } from "./SegmentedControl";
 
 const HOURS = ["8 AM", "11 AM", "2 PM", "5 PM", "9 PM"];
+const MAX_WINDOW_INDEX = HOURS.length - 1;
+const DAYS_OPTIONS: Day[] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+// Helper to compute layout percentage for slider positions
+const getPercentage = (value: number, max: number): number => {
+  return (value / max) * 100;
+};
 
 interface GuardrailsCardProps {
   callingDays: Day[];
@@ -18,38 +27,13 @@ export const GuardrailsCard: React.FC<GuardrailsCardProps> = ({
 }) => {
   const windowTrackRef = useRef<HTMLDivElement>(null);
 
-  const handleWindowPointerDown = (e: React.PointerEvent) => {
-    if (!windowTrackRef.current) return;
-    const track = windowTrackRef.current;
-    const rect = track.getBoundingClientRect();
-    const width = rect.width;
-
-    const updateValue = (clientX: number) => {
-      const offsetX = Math.max(0, Math.min(clientX - rect.left, width));
-      const percentage = offsetX / width;
-      const index = Math.round(percentage * 4);
-      setWindowEnd(index);
-    };
-
-    updateValue(e.clientX);
-
-    const handlePointerMove = (moveEvent: PointerEvent) => {
-      updateValue(moveEvent.clientX);
-    };
-
-    const handlePointerUp = () => {
-      document.removeEventListener("pointermove", handlePointerMove);
-      document.removeEventListener("pointerup", handlePointerUp);
-    };
-
-    document.addEventListener("pointermove", handlePointerMove);
-    document.addEventListener("pointerup", handlePointerUp);
-  };
+  // Hook-encapsulated accessible slider handling
+  const handleWindowPointerDown = useSlider(windowTrackRef, MAX_WINDOW_INDEX, setWindowEnd);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowRight" || e.key === "ArrowUp") {
       e.preventDefault();
-      setWindowEnd(Math.min(4, windowEnd + 1));
+      setWindowEnd(Math.min(MAX_WINDOW_INDEX, windowEnd + 1));
     } else if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
       e.preventDefault();
       setWindowEnd(Math.max(0, windowEnd - 1));
@@ -58,31 +42,20 @@ export const GuardrailsCard: React.FC<GuardrailsCardProps> = ({
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden flex-1 flex flex-col">
-      <div className="bg-[#F8FAFC] border-b border-slate-100 px-6 py-2">
+      <div className="bg-slate-50 border-b border-slate-100 px-6 py-2">
         <h2 className="font-bold text-slate-800 text-base">Guardrails</h2>
       </div>
       <div className="p-6 space-y-10 flex-1 flex flex-col justify-center">
         {/* Calling Days */}
         <div>
           <h3 className="font-bold text-slate-900 text-sm mb-4">Calling days</h3>
-          <div className="flex flex-wrap gap-2">
-            {(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as Day[]).map((day) => {
-              const isSelected = callingDays.includes(day);
-              return (
-                <button
-                  key={day}
-                  onClick={() => toggleDay(day)}
-                  className={`w-[64px] h-[40px] rounded-lg text-sm transition-all duration-200 cursor-pointer ${
-                    isSelected
-                      ? "bg-slate-800 text-white hover:bg-slate-700"
-                      : "font-semibold bg-white text-slate-950 border border-slate-200 hover:bg-slate-50"
-                  }`}
-                >
-                  {day}
-                </button>
-              );
-            })}
-          </div>
+          <SegmentedControl
+            options={DAYS_OPTIONS}
+            selected={callingDays}
+            onChange={toggleDay}
+            isMulti
+            variant="pills"
+          />
         </div>
 
         {/* Calling Window */}
@@ -97,7 +70,7 @@ export const GuardrailsCard: React.FC<GuardrailsCardProps> = ({
               tabIndex={0}
               role="slider"
               aria-valuemin={0}
-              aria-valuemax={4}
+              aria-valuemax={MAX_WINDOW_INDEX}
               aria-valuenow={windowEnd}
               aria-valuetext={HOURS[windowEnd]}
               aria-label="Calling window end time"
@@ -108,7 +81,7 @@ export const GuardrailsCard: React.FC<GuardrailsCardProps> = ({
                 className="absolute h-full bg-slate-900 rounded-full"
                 style={{
                   left: "0%",
-                  right: `${100 - (windowEnd / 4) * 100}%`,
+                  right: `${100 - getPercentage(windowEnd, MAX_WINDOW_INDEX)}%`,
                 }}
               />
             </div>
@@ -122,7 +95,7 @@ export const GuardrailsCard: React.FC<GuardrailsCardProps> = ({
                   className={`absolute transform -translate-x-1/2 whitespace-nowrap cursor-pointer hover:text-slate-800 transition-colors ${
                     idx <= windowEnd ? "text-slate-700" : "text-slate-400"
                   }`}
-                  style={{ left: `${(idx / 4) * 100}%` }}
+                  style={{ left: `${getPercentage(idx, MAX_WINDOW_INDEX)}%` }}
                 >
                   {hour}
                 </span>

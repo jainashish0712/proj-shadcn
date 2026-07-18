@@ -1,45 +1,54 @@
 "use client";
 
 import React, { useState } from "react";
-import { Day, getPenalties } from "../utils/scoring";
+import { Day, getPenalties, ScoringParams } from "../utils/scoring";
 import { GuardrailsCard } from "../components/GuardrailsCard";
 import { RedialCard } from "../components/RedialCard";
 import { ScoreCard } from "../components/ScoreCard";
 
 export default function Home() {
-  // State for Guardrails
-  const [callingDays, setCallingDays] = useState<Day[]>([
-    "Mon",
-    "Tue",
-    "Wed",
-    "Thu",
-    "Fri",
-  ]);
-  const [windowEnd, setWindowEnd] = useState<number>(4); // Default 9 PM (index 4)
-
-  // State for Redial
-  const [redialCount, setRedialCount] = useState<number>(5);
-  const [redialInterval, setRedialInterval] = useState<string>("3 hours");
-
-  const { days: daysP, window: windowP, count: countP, interval: intervalP } = getPenalties({
-    callingDays,
-    windowEnd,
-    redialCount,
-    redialInterval,
+  // Unified state for all scoring configuration parameters
+  const [settings, setSettings] = useState<ScoringParams>({
+    callingDays: ["Mon", "Tue", "Wed", "Thu", "Fri"],
+    windowEnd: 4, // Default 9 PM (index 4)
+    redialCount: 5,
+    redialInterval: "3 hours",
   });
+
+  const { days: daysP, window: windowP, count: countP, interval: intervalP } = getPenalties(settings);
   const totalScore = Math.max(0, 100 - (daysP + windowP + countP + intervalP));
 
-  // Toggle Calling Days
+  // Toggle Calling Days using early return (guard clause pattern)
   const toggleDay = (day: Day) => {
-    if (callingDays.includes(day)) {
-      setCallingDays(callingDays.filter((d) => d !== day));
-    } else {
-      setCallingDays([...callingDays, day]);
-    }
+    setSettings((prev) => {
+      const isSelected = prev.callingDays.includes(day);
+      if (isSelected) {
+        return {
+          ...prev,
+          callingDays: prev.callingDays.filter((d) => d !== day),
+        };
+      }
+      return {
+        ...prev,
+        callingDays: [...prev.callingDays, day],
+      };
+    });
+  };
+
+  const setWindowEnd = (windowEnd: number) => {
+    setSettings((prev) => ({ ...prev, windowEnd }));
+  };
+
+  const setRedialCount = (redialCount: number) => {
+    setSettings((prev) => ({ ...prev, redialCount }));
+  };
+
+  const setRedialInterval = (redialInterval: string) => {
+    setSettings((prev) => ({ ...prev, redialInterval }));
   };
 
   return (
-    <div className="flex-1 bg-[#F9FAFB] flex flex-col font-sans">
+    <div className="flex-1 bg-slate-50 flex flex-col font-sans">
       {/* Main Content Area */}
       <div className="max-w-7xl mx-auto w-full px-12 pt-12 pb-24 flex-1 flex flex-col">
         {/* Title */}
@@ -52,22 +61,22 @@ export default function Home() {
           {/* Left Column - Controls */}
           <div className="lg:col-span-6 space-y-12 flex flex-col">
             <GuardrailsCard
-              callingDays={callingDays}
+              callingDays={settings.callingDays}
               toggleDay={toggleDay}
-              windowEnd={windowEnd}
+              windowEnd={settings.windowEnd}
               setWindowEnd={setWindowEnd}
             />
 
             <RedialCard
-              redialCount={redialCount}
+              redialCount={settings.redialCount}
               setRedialCount={setRedialCount}
-              redialInterval={redialInterval}
+              redialInterval={settings.redialInterval}
               setRedialInterval={setRedialInterval}
             />
           </div>
 
           {/* Right Column - Score & Penalty Details */}
-          <div className="lg:col-span-5 flex flex-col h-[95%]">
+          <div className="lg:col-span-5 flex flex-col">
             <ScoreCard
               totalScore={totalScore}
               daysP={daysP}
@@ -82,7 +91,7 @@ export default function Home() {
       {/* Sticky Bottom Footer */}
       <footer className="border-t border-slate-200 bg-white py-4 px-6 mt-auto">
         <div className="max-w-7xl mx-auto w-full flex justify-end">
-          <button className="bg-[#000] hover:bg-[#000] text-white font-semibold text-sm px-6 py-2.5 rounded-lg transition-colors cursor-pointer ">
+          <button className="bg-black hover:bg-slate-900 text-white font-semibold text-sm px-6 py-2.5 rounded-lg transition-colors cursor-pointer ">
             Submit
           </button>
         </div>
