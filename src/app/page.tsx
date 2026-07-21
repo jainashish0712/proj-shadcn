@@ -92,7 +92,7 @@ export default function Home() {
       {/* Sticky Bottom Footer */}
       <footer className="border-t border-slate-200 bg-white py-4 px-6 sm:px-12 mt-auto">
         <div className="max-w-7xl mx-auto w-full flex justify-end">
-          <Button className="bg-[#525866] hover:bg-[#3A3E47] text-white font-semibold text-sm px-7 py-2.5 rounded-lg transition-colors cursor-pointer">
+          <Button className="bg-[#525866] hover:bg-[#3A3E47] text-white font-semibold text-sm px-7 py-2.5 transition-colors cursor-pointer">
             Submit
           </Button>
         </div>

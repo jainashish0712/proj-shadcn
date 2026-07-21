@@ -25,7 +25,7 @@ export const GuardrailsCard: React.FC<GuardrailsCardProps> = ({
       <CardHeader>
         <CardTitle>Guardrails</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-8 flex-1 flex flex-col justify-center">
+      <CardContent className="space-y-8 flex-1 flex flex-col">
         {/* Calling Days */}
         <div>
           <h4 className="font-semibold text-slate-900 text-sm mb-3">

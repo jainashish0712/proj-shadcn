@@ -47,10 +47,10 @@ export const ScoreCard: React.FC<ScoreCardProps> = ({
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden flex-1 flex flex-col">
+    <div className="bg-white  border border-slate-200/80 shadow-xs overflow-hidden flex-1 flex flex-col">
       {/* Weather Illustration Header with Stacked SVG Crossfade */}
       <div
-        className="relative w-full aspect-[540/404] overflow-hidden rounded-t-2xl flex-shrink-0 transition-[background-color] duration-700 ease-in-out"
+        className="relative w-full aspect-[540/404] overflow-hidden  flex-shrink-0 transition-[background-color] duration-700 ease-in-out"
         style={{ backgroundColor: SKY_COLORS[activeLevelIndex] }}
       >
         {WEATHER_SVGS.map((svgPath, idx) => (
