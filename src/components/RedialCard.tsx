@@ -1,5 +1,9 @@
 import React from "react";
-import * as SliderPrimitive from "@radix-ui/react-slider";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Slider } from "@/components/ui/slider";
+
+const REDIAL_INTERVALS = ["3 hours", "6 hours", "9 hours", "12 hours", "24 hours"];
+const REDIAL_TICKS = [0, 2, 4, 6, 8, 10];
 
 interface RedialCardProps {
   redialCount: number;
@@ -15,51 +19,37 @@ export const RedialCard: React.FC<RedialCardProps> = ({
   setRedialInterval,
 }) => {
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden flex-1 flex flex-col">
-      <div className="bg-[#F8FAFC] border-b border-slate-100 px-6 py-2">
-        <h2 className="font-bold text-slate-800 text-base">Redial</h2>
-      </div>
-      <div className="p-4 flex-1 flex flex-col justify-center">
+    <Card className="flex-1 flex flex-col">
+      <CardHeader>
+        <CardTitle>Redial</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-8 flex-1 flex flex-col justify-center">
         {/* Redial Count */}
         <div>
-          <h3 className="font-bold text-slate-900 text-sm mb-3">Redial count</h3>
-          <div className="px-1 pt-2 pb-6">
-            {/* Radix UI Standard Slider matching original styling */}
-            <SliderPrimitive.Root
-              value={[redialCount]}
-              onValueChange={(val) => setRedialCount(val[0])}
+          <h4 className="font-semibold text-slate-900 text-sm mb-3">
+            Redial count
+          </h4>
+          <div className="px-1 pt-1 pb-4">
+            <Slider
+              min={0}
               max={10}
               step={1}
-              className="relative flex items-center select-none touch-none w-full h-[6px] bg-slate-200 rounded-full cursor-pointer"
-            >
-              <SliderPrimitive.Track className="relative grow h-full rounded-full">
-                <SliderPrimitive.Range className="absolute h-full bg-slate-900 rounded-full" />
-              </SliderPrimitive.Track>
-              <SliderPrimitive.Thumb 
-                className="block w-4 h-4 bg-transparent outline-none cursor-pointer focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 rounded-full" 
-                aria-label="Redial count" 
-              />
-
-              {/* Tick Marks (0, 2, 4, 6, 8, 10) */}
-              {[0, 2, 4, 6, 8, 10].map((val) => (
-                <div
-                  key={val}
-                  className={`absolute w-[1px] h-[6px] -top-[0px] transform -translate-x-1/2 pointer-events-none ${
-                    val <= redialCount ? "bg-slate-900" : "bg-slate-300"
-                  }`}
-                  style={{ left: `${(val / 10) * 100}%` }}
-                />
-              ))}
-            </SliderPrimitive.Root>
+              value={[redialCount]}
+              onValueChange={(val) => setRedialCount(val[0])}
+              ticks={REDIAL_TICKS}
+              aria-label="Redial count"
+            />
 
             {/* Timeline Labels */}
-            <div className="relative mt-4 h-6 text-xs font-semibold text-slate-450">
-              {[0, 2, 4, 6, 8, 10].map((val) => (
+            <div className="relative mx-1 mt-3 h-5 text-xs font-semibold">
+              {REDIAL_TICKS.map((val) => (
                 <span
                   key={val}
                   onClick={() => setRedialCount(val)}
-                  className={`absolute transform -translate-x-1/2 cursor-pointer hover:text-slate-800 transition-colors ${
-                    val === redialCount ? "text-slate-700 font-bold" : "text-slate-400"
+                  className={`absolute transform -translate-x-1/2 cursor-pointer transition-colors ${
+                    val === redialCount
+                      ? "text-slate-700 font-bold"
+                      : "text-slate-400 font-semibold"
                   }`}
                   style={{ left: `${(val / 10) * 100}%` }}
                 >
@@ -72,17 +62,20 @@ export const RedialCard: React.FC<RedialCardProps> = ({
 
         {/* Redial Interval */}
         <div>
-          <h3 className="font-bold text-slate-900 text-sm mb-4">Redial interval</h3>
-          <div className="bg-slate-100/80 p-1 rounded-xl flex">
-            {["3 hours", "6 hours", "9 hours", "12 hours", "24 hours"].map((interval) => {
+          <h4 className="font-semibold text-slate-900 text-sm mb-3">
+            Redial interval
+          </h4>
+          <div className="bg-slate-100 p-1 rounded-xl flex border border-slate-200/50">
+            {REDIAL_INTERVALS.map((interval) => {
               const isSelected = redialInterval === interval;
               return (
                 <button
                   key={interval}
+                  type="button"
                   onClick={() => setRedialInterval(interval)}
-                  className={`flex-1 py-2.5 rounded-lg text-s font-semibold transition-all duration-200 cursor-pointer ${
+                  className={`flex-1 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                     isSelected
-                      ? "bg-white text-slate-900 border-slate-100"
+                      ? "bg-white text-slate-900 shadow-xs border border-slate-200/60"
                       : "text-slate-500 hover:text-slate-800"
                   }`}
                 >
@@ -92,7 +85,7 @@ export const RedialCard: React.FC<RedialCardProps> = ({
             })}
           </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };

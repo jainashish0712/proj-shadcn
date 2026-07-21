@@ -5,6 +5,7 @@ import { Day, getPenalties, ScoringParams } from "@/utils/scoring";
 import { GuardrailsCard } from "@/components/GuardrailsCard";
 import { RedialCard } from "@/components/RedialCard";
 import { ScoreCard } from "@/components/ScoreCard";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   // Unified state for all scoring configuration parameters
@@ -48,18 +49,18 @@ export default function Home() {
   };
 
   return (
-    <div className="flex-1 bg-[#F9FAFB] flex flex-col font-sans">
+    <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-sans">
       {/* Main Content Area */}
-      <div className="max-w-7xl mx-auto w-full px-12 pt-12 pb-24 flex-1 flex flex-col">
-        {/* Title */}
-        <h1 className="text-3xl font-bold text-slate-800 tracking-tight mb-8">
+      <main className="max-w-7xl mx-auto w-full px-6 sm:px-12 pt-10 pb-20 flex-1 flex flex-col">
+        {/* Page Title */}
+        <h1 className="text-3xl font-bold text-slate-900 tracking-tight mb-8">
           Redial & Guardrails
         </h1>
 
         {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
-          {/* Left Column - Controls */}
-          <div className="lg:col-span-6 space-y-12 flex flex-col">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left Column - Controls (Shadcn components) */}
+          <div className="lg:col-span-6 space-y-8 flex flex-col">
             <GuardrailsCard
               callingDays={settings.callingDays}
               toggleDay={toggleDay}
@@ -75,8 +76,8 @@ export default function Home() {
             />
           </div>
 
-          {/* Right Column - Score & Penalty Details */}
-          <div className={`lg:col-span-5 flex flex-col ${totalScore <= 50 ? "h-full" : "h-[95%]"}`}>
+          {/* Right Column - Score & Weather Widget */}
+          <div className="lg:col-span-6 flex flex-col">
             <ScoreCard
               totalScore={totalScore}
               daysP={daysP}
@@ -86,14 +87,14 @@ export default function Home() {
             />
           </div>
         </div>
-      </div>
+      </main>
 
       {/* Sticky Bottom Footer */}
-      <footer className="border-t border-slate-200 bg-white py-4 px-6 mt-auto">
+      <footer className="border-t border-slate-200 bg-white py-4 px-6 sm:px-12 mt-auto">
         <div className="max-w-7xl mx-auto w-full flex justify-end">
-          <button className="bg-[#71717a] hover:bg-[#000] text-white font-semibold text-sm px-6 py-2.5 rounded-lg transition-colors cursor-pointer ">
+          <Button className="bg-[#525866] hover:bg-[#3A3E47] text-white font-semibold text-sm px-7 py-2.5 rounded-lg transition-colors cursor-pointer">
             Submit
-          </button>
+          </Button>
         </div>
       </footer>
     </div>

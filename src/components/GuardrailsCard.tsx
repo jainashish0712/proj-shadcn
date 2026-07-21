@@ -1,8 +1,11 @@
 import React from "react";
-import * as SliderPrimitive from "@radix-ui/react-slider";
 import { Day } from "@/utils/scoring";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
 
 const HOURS = ["8 AM", "11 AM", "2 PM", "5 PM", "9 PM"];
+const ALL_DAYS: Day[] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 interface GuardrailsCardProps {
   callingDays: Day[];
@@ -18,29 +21,33 @@ export const GuardrailsCard: React.FC<GuardrailsCardProps> = ({
   setWindowEnd,
 }) => {
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden flex-1 flex flex-col">
-      <div className="bg-[#F8FAFC] border-b border-slate-100 px-6 py-2">
-        <h2 className="font-bold text-slate-800 text-base">Guardrails</h2>
-      </div>
-      <div className="p-6 space-y-10 flex-1 flex flex-col justify-center">
+    <Card className="flex-1 flex flex-col">
+      <CardHeader>
+        <CardTitle>Guardrails</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-8 flex-1 flex flex-col justify-center">
         {/* Calling Days */}
         <div>
-          <h3 className="font-bold text-slate-900 text-sm mb-4">Calling days</h3>
+          <h4 className="font-semibold text-slate-900 text-sm mb-3">
+            Calling days
+          </h4>
           <div className="flex flex-wrap gap-2">
-            {(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as Day[]).map((day) => {
+            {ALL_DAYS.map((day) => {
               const isSelected = callingDays.includes(day);
               return (
-                <button
+                <Button
                   key={day}
+                  type="button"
+                  variant={isSelected ? "default" : "outline"}
                   onClick={() => toggleDay(day)}
-                  className={`w-[64px] h-[40px] rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer ${
+                  className={`w-16 h-10 text-sm font-semibold transition-all cursor-pointer ${
                     isSelected
-                      ? "bg-slate-800 text-white hover:bg-slate-700"
-                      : "bg-white text-slate-750 border border-slate-200 hover:bg-slate-50"
+                      ? "bg-slate-900 text-white hover:bg-slate-800"
+                      : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
                   }`}
                 >
                   {day}
-                </button>
+                </Button>
               );
             })}
           </div>
@@ -48,33 +55,29 @@ export const GuardrailsCard: React.FC<GuardrailsCardProps> = ({
 
         {/* Calling Window */}
         <div>
-          <h3 className="font-bold text-slate-900 text-sm mb-3">Calling window</h3>
-          <div className="px-1 pt-2 pb-6">
-            {/* Radix UI Standard Slider matching original styling */}
-            <SliderPrimitive.Root
-              value={[windowEnd]}
-              onValueChange={(val) => setWindowEnd(val[0])}
+          <h4 className="font-semibold text-slate-900 text-sm mb-3">
+            Calling window
+          </h4>
+          <div className="px-1 pt-1 pb-4">
+            <Slider
+              min={0}
               max={4}
               step={1}
-              className="relative flex items-center select-none touch-none w-full h-[6px] bg-slate-200 rounded-full cursor-pointer"
-            >
-              <SliderPrimitive.Track className="relative grow h-full rounded-full">
-                <SliderPrimitive.Range className="absolute h-full bg-slate-900 rounded-full" />
-              </SliderPrimitive.Track>
-              <SliderPrimitive.Thumb 
-                className="block w-4 h-4 bg-transparent outline-none cursor-pointer focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 rounded-full" 
-                aria-label="Calling window end time" 
-              />
-            </SliderPrimitive.Root>
+              value={[windowEnd]}
+              onValueChange={(val) => setWindowEnd(val[0])}
+              aria-label="Calling window end time"
+            />
 
             {/* Timeline Labels */}
-            <div className="relative mx-2 mt-4 h-6 text-xs font-semibold text-slate-400">
+            <div className="relative mx-1 mt-3 h-5 text-xs font-semibold">
               {HOURS.map((hour, idx) => (
                 <span
                   key={hour}
                   onClick={() => setWindowEnd(idx)}
-                  className={`absolute transform -translate-x-1/2 whitespace-nowrap cursor-pointer hover:text-slate-800 transition-colors ${
-                    idx <= windowEnd ? "text-slate-700" : "text-slate-400"
+                  className={`absolute transform -translate-x-1/2 whitespace-nowrap cursor-pointer transition-colors ${
+                    idx <= windowEnd
+                      ? "text-slate-700 font-bold"
+                      : "text-slate-400 font-semibold"
                   }`}
                   style={{ left: `${(idx / 4) * 100}%` }}
                 >
@@ -84,7 +87,7 @@ export const GuardrailsCard: React.FC<GuardrailsCardProps> = ({
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
